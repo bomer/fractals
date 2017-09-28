@@ -39,48 +39,55 @@
 
 <footer> 
 	<script type="text/javascript" >
-
+		var scale=window.devicePixelRatio;
 		var height = window.innerHeight * window.devicePixelRatio;
 		var width=window.innerWidth * window.devicePixelRatio;
+		var frame=0;
+		var color="black";
 
+		var drawheight=height;
 		canvas.width=width;
 		canvas.height=height;
 		canvas.style.width = window.innerWidth + "px";
 		canvas.style.height = window.innerHeight + "px";
 
 		ctx = canvas.getContext("2d");
+		function swapColor(){
+			console.log(ctx.stroke.style);
+			if(color=="black")
+				color="white";
+			else
+				color="black";
+		}
 
 		function drawCircle(x,y,radius){
 			ctx.beginPath();
-			// ctx.moveTo(pos.x, pos.y);
-			ctx.fillStyle="white";
-			ctx.arc(x,y,radius,0,2*Math.PI);
-			ctx.stroke();
-			ctx.fill();
+			ctx.strokeStyle=color;
+			ctx.arc(x,y,radius,0,2*Math.PI);						
 			ctx.stroke();
 
 			if(radius > 2) {
-				radius *= 1;				
-				// drawCircle(x, y, radius);
-				
-				drawCircle(x + radius/2, y, radius/2);
-    			drawCircle(x - radius/2, y, radius/2);
-    			
+				radius *= 0.65;				
+				drawCircle(x, y, radius);
 			}
 
 		}
 
 		function Draw() {   
-			ctx.clearRect(0, 0, canvas.width, canvas.height);			
+			frame++;
+			// ctx.clearRect(0, 0, canvas.width, canvas.height);			
 			var pos = {x:width/2, y:height/2};
-			drawCircle(pos.x,pos.y,height);	
-			
-		}
+			drawCircle(pos.x,pos.y,drawheight);	
+			drawheight*=1.003;
+			if(frame%1000==0){		
+				swapColor();
+			}
 
-		function start(){
-			Draw();
+			window.requestAnimationFrame(Draw);
 		}
-		start();
+		
+		
+		window.requestAnimationFrame(Draw);
 
 
 	</script>
